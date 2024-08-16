@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <div class="flex items-center justify-center min-h-screen bg-orange-400">
+      <div
+        class="relative flex flex-col m-6 space-y-8 bg-white shadow-2xl rounded-2xl md:flex-row md:space-y-0"
+      >
+        <!-- left side -->
+        <div class="flex flex-col justify-center p-8 md:p-14">
+          <span class="mb-3 text-4xl text-orange-400 font-bold">Log in</span>
+          <span class="font-light text-orange-700 mb-8">
+            Welcom back! Please enter your details
+          </span>
+
+          <div class="py-4">
+            <span class="mb-2 text-md">Email</span>
+            <input
+              type="email"
+              class="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500"
+              name="email"
+              id="email"
+            />
+          </div>
+          <div class="py-4">
+            <span class="mb-2 text-md">Password</span>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              class="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500"
+            />
+          </div>
+
+          <button
+            class="w-full bg-black text-white p-2 rounded-lg mb-6 hover:bg-white hover:text-black hover:border hover:border-gray-300"
+            id="signin"
+          >
+            Login
+          </button>
+          <div class="text-center text-gray-400">
+            Dont'have an account?
+            <span class="font-bold text-black">
+              <a href="./index.html">Sign up</a>
+            </span>
+          </div>
+        </div>
+        <!-- {/* right side */} -->
+        <div class="relative">
+          <img
+            src="./sidecap.JPG"
+            alt="img"
+            class="w-[400px] h-full hidden rounded-r-2xl md:block object-cover"
+          />
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+      import {
+        getDatabase,
+        update,
+        ref,
+      } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
+      import {
+        getAuth,
+        signInWithEmailAndPassword,
+      } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyDzP3KMRSD-lyOoL3HZsacNZsclG2dwrhk",
+        authDomain: "login-js-b6fe3.firebaseapp.com",
+        databaseURL: "https://login-js-b6fe3-default-rtdb.firebaseio.com",
+        projectId: "login-js-b6fe3",
+        storageBucket: "login-js-b6fe3.appspot.com",
+        messagingSenderId: "923388580094",
+        appId: "1:923388580094:web:a50134bb072d6af33555af",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const database = getDatabase(app);
+      const auth = getAuth();
+
+      signin.addEventListener("click", (e) => {
+        var email = document.getElementById("email").value;
+        var password = document.getElementById("password").value;
+
+        // const auth = getAuth();
+        signInWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            // Signed in
+            const user = userCredential.user;
+
+            const dt = new Date();
+
+            update(ref(database, "users/" + user.uid), {
+              last_login: dt,
+            })
+            alert("user login");
+            // ...
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            alert("errorMessage");
+          });
+      });
+    </script>
+  </body>
+</html>
